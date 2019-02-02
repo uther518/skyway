@@ -1,0 +1,17 @@
+- SessionClient with referer and cookies support.
+- ProxyHandler similar to FSHandler.
+- WebSockets. See https://tools.ietf.org/html/rfc6455 .
+- HTTP/2.0. See https://tools.ietf.org/html/rfc7540 .
+
+
+==========================
+1,URI路由改写
+2,backend节点管理,添加，删除，配置
+3,backend负载均衡策略
+4,每分钟请求数，成功数，失败数，按状态码统计，最快，平均，最慢响应时间
+5,限流，5分钟内流量上限，针对IP限流
+6,熔断管理,
+7,IP白名单，黑名单
+8,注册中心，服务发现,兼容sprint cloud生态, @EnableEurekaServer @feign
+9,兼容Swagger,一键导入
+10,自发现
