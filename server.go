@@ -547,6 +547,14 @@ func (ctx *RequestCtx) UserValue(key string) interface{} {
 	return ctx.userValues.Get(key)
 }
 
+func (ctx *RequestCtx) UserIndexValue(index int) interface{} {
+	return ctx.userValues.Index(index)
+}
+
+func (ctx *RequestCtx) UserValueSize() int {
+	return ctx.userValues.Size();
+}
+
 // UserValueBytes returns the value stored via SetUserValue*
 // under the given key.
 func (ctx *RequestCtx) UserValueBytes(key []byte) interface{} {

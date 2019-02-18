@@ -54,6 +54,22 @@ func (d *userData) Get(key string) interface{} {
 	return nil
 }
 
+func (d *userData) Index(index int) interface{} {
+	args := *d
+	n := len(args)
+	if(index>n || index<=0){
+		return nil
+	}
+	index-=1
+	kv := &args[index]
+	return kv.value
+}
+func (d *userData) Size() int {
+	args := *d
+	n := len(args)
+	return n;
+}
+
 func (d *userData) GetBytes(key []byte) interface{} {
 	return d.Get(b2s(key))
 }
