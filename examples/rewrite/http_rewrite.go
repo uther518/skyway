@@ -53,6 +53,13 @@ func RegExpUri() {
  * 重定向
  */
 func main() {
+
+	defer func() {
+		if err := recover(); err != nil {
+			log.Fatal("终于捕获到了panic产生的异常：", err)
+		}
+	}()
+
 	rewrite := skyhttprewrite.New()
 	a := skyhttprewrite.RewriteUri{};
 	a.OriginUri="/hello/{name}/test/{foo}"
@@ -63,12 +70,17 @@ func main() {
 	b.DestUri = "/hello/test/$1"
 
 	c := skyhttprewrite.RewriteUri{};
-	c.OriginUri="/user/{id}?age={g}"
-	c.DestUri = "/user/$1/age/${age}"
+	c.OriginUri="/user/{id}?age={age}"
+	c.DestUri = "/user/$1/age/$2"
+
+	d := skyhttprewrite.RewriteUri{};
+	d.OriginUri="/foo/bar"
+	d.DestUri = "/v1/bar/foo"
 
 	rewrite.GET(a.OriginUri, &a)
 	rewrite.GET(b.OriginUri, &b)
-	//rewrite.GET(c.OriginUri, &c)
+	rewrite.GET(c.OriginUri, &c)
+	rewrite.GET(d.OriginUri, &d)
 
 	log.Fatal(fasthttp.ListenAndServe(":8080", rewrite.Handler))
 }

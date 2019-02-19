@@ -77,7 +77,10 @@ import (
 	"fmt"
 	"github.com/prometheus/common/log"
 	"github.com/valyala/fasthttp"
+	"net/url"
 	"regexp"
+	"strconv"
+	"strings"
 )
 
 var (
@@ -87,11 +90,13 @@ var (
 
 type RewriteUri struct {
 	//---/hello/foo1111/test/name2222
-	OriginUri  string //---/hello/{name}/test/{foo} uri参数表达式,用户设定
-	RouterPath string //---/hello/:name/test/:foo 路由匹配,fastrouter
-	DestUri    string //---/test/$1/hello/$2   目标uri转换
-	OriginReg  string //---/hello/(\w+)/test/(\w+)
-	Regexp     *regexp.Regexp
+	OriginUri          string //---/hello/{name}/test/{foo} uri参数表达式,用户设定
+	RouterPath         string //---/hello/:name/test/:foo 路由匹配,fastrouter
+	DestUri            string //---/test/$1/hello/$2   目标uri转换
+	OriginReg          string //---/hello/(\w+)/test/(\w+)
+	Regexp             *regexp.Regexp
+	IsMatchQueryString bool
+	QueryParams        []string
 }
 
 /**
@@ -99,15 +104,45 @@ type RewriteUri struct {
  {foo}形参转为正则表达式:foo
  */
 func (r *RewriteUri) MakeRegexp() {
+
+	//带形参匹配
+	pos := strings.Index(r.OriginUri, "?")
+	log.Info("params", r.OriginUri)
+	if pos > 0 {
+		queryStr := r.OriginUri[pos+1 : len(r.OriginUri)]
+		r.OriginUri = r.OriginUri[0:pos]
+
+		params := strings.Split(queryStr, "&")
+		for _, pair := range params {
+			pairs := strings.Split(pair, "=")
+
+			index := strings.IndexByte(pairs[1], '{')
+			if index == 0 {
+				index = strings.IndexByte(pairs[1], '}')
+				if index <= 0 {
+					continue
+				}
+			} else if index < 0 {
+				index := strings.IndexByte(pairs[1], ':')
+				if index != 0 {
+					continue
+				}
+			} else {
+				continue
+			}
+			r.IsMatchQueryString = true
+			r.QueryParams = append(r.QueryParams, pairs[0])
+		}
+	}
+
 	regstr := `(\{\w+\})`
 	regCompile := regexp.MustCompile(regstr)
 	r.OriginReg = regCompile.ReplaceAllString(r.OriginUri, `(\w+)`)
 	//r.DestReg = regCompile.ReplaceAllString(r.OriginUri, )
 	r.Regexp = regexp.MustCompile(r.OriginReg);
-
 	regpath := `\{(\w+)\}`
 	pathCompile := regexp.MustCompile(regpath)
-	r.RouterPath = pathCompile.ReplaceAllString(r.OriginUri,":${1}" )
+	r.RouterPath = pathCompile.ReplaceAllString(r.OriginUri, ":${1}")
 }
 
 // Router is a http.Handler which can be used to dispatch requests to different
@@ -225,8 +260,7 @@ func (r *Router) Handle(method, path string, rewriteUri *RewriteUri) {
 
 	rewriteUri.OriginUri = path
 	rewriteUri.MakeRegexp()
-	path=rewriteUri.RouterPath;
-
+	path = rewriteUri.RouterPath;
 	if r.trees == nil {
 		r.trees = make(map[string]*node)
 	}
@@ -318,12 +352,18 @@ func (r *Router) allowed(path, reqMethod string) (allow string) {
 }
 
 func WriteRequest(ctx *fasthttp.RequestCtx, rewriteUri *RewriteUri) {
-	//fmt.Fprintf(ctx, "HelloTest, %s!\n", ctx.UserValue("name"))
-	//fmt.Fprintf(ctx, "RewriteUri, %s---->%s\n", rewriteUri.OriginUri, rewriteUri.DestUri)
-	//fmt.Fprintf(ctx, "DestUri, %s\n", ctx.UserIndexValue(1))
-	ctx.UserValueSize();
-
-	fmt.Fprintf(ctx, "%q\n", rewriteUri.Regexp.ReplaceAllString(ctx.URI().String(), rewriteUri.DestUri))
+	destUri:=rewriteUri.DestUri
+	//传统api转为restful api
+	if rewriteUri.IsMatchQueryString {
+		values, _ := url.ParseQuery(string(ctx.URI().QueryString()))
+		for _, key := range rewriteUri.QueryParams {
+			val:=values.Get(key)
+			idx:=ctx.UserValueSize()+1
+			sep:="$"+strconv.Itoa(idx)
+			destUri=strings.Replace(destUri,sep,val,-1)
+		}
+	}
+	fmt.Fprintf(ctx, "%q\n", rewriteUri.Regexp.ReplaceAllString(ctx.URI().String(),destUri))
 }
 
 /**
@@ -335,8 +375,10 @@ func (r *Router) Handler(ctx *fasthttp.RequestCtx) {
 		defer r.recv(ctx)
 	}
 
-	log.Info("skyhttprouter Handler start...")
 	path := string(ctx.URI().PathOriginal())
+	queryString := string(ctx.URI().QueryString())
+
+	log.Info("skyhttprouter Handler start:", path, queryString)
 	method := string(ctx.Method())
 	if root := r.trees[method]; root != nil {
 		if writeUri, tsr := root.getValue(path, ctx); writeUri != nil {
@@ -349,6 +391,7 @@ func (r *Router) Handler(ctx *fasthttp.RequestCtx) {
 				// As of Go 1.3, Go does not support status code 308.
 				code = 307
 			}
+			log.Info("skyhttprouter Handler tsr:", tsr)
 
 			if tsr && r.RedirectTrailingSlash {
 				var uri string

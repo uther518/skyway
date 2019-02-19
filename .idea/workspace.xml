@@ -2,24 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b1e7c93e-2e0e-4ab9-b630-0c66744f0c90" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/examples/etcd/etcd_client.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/examples/rewrite/http_rewrite.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/examples/router/http_router.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/skyhttprewrite/params_legacy.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/skyhttprewrite/path.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/skyhttprewrite/rewrite.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/skyhttprewrite/tree.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/skyhttprouter/params_legacy.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/skyhttprouter/path.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/skyhttprouter/router.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/skyhttprouter/tree.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/go.mod" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/go.sum" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/reverseproxy/fast_reverse_proxy.go" beforeDir="false" afterPath="$PROJECT_DIR$/reverseproxy/fast_reverse_proxy.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server.go" beforeDir="false" afterPath="$PROJECT_DIR$/server.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/userdata.go" beforeDir="false" afterPath="$PROJECT_DIR$/userdata.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/examples/rewrite/http_rewrite.go" beforeDir="false" afterPath="$PROJECT_DIR$/examples/rewrite/http_rewrite.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/skyhttprewrite/rewrite.go" beforeDir="false" afterPath="$PROJECT_DIR$/skyhttprewrite/rewrite.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/skyhttprewrite/tree.go" beforeDir="false" afterPath="$PROJECT_DIR$/skyhttprewrite/tree.go" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -29,11 +15,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/examples/rewrite/http_rewrite.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="270">
-              <caret line="69" column="13" selection-start-line="69" selection-start-column="13" selection-end-line="69" selection-end-column="13" />
+            <state relative-caret-position="292">
+              <caret line="77" column="20" selection-start-line="77" selection-start-column="20" selection-end-line="77" selection-end-column="20" />
               <folding>
                 <element signature="e#14#125#0" expanded="true" />
               </folding>
@@ -44,8 +30,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/skyhttprewrite/tree.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2564">
-              <caret line="244" column="20" selection-start-line="244" selection-start-column="20" selection-end-line="244" selection-end-column="20" />
+            <state relative-caret-position="417">
+              <caret line="50" column="21" lean-forward="true" selection-start-line="50" selection-start-column="4" selection-end-line="50" selection-end-column="21" />
             </state>
           </provider>
         </entry>
@@ -53,7 +39,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/examples/router/http_router.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="286">
+            <state relative-caret-position="688">
               <caret line="43" column="49" lean-forward="true" selection-start-line="43" selection-end-line="43" selection-end-column="49" />
               <folding>
                 <element signature="e#14#114#0" expanded="true" />
@@ -62,11 +48,41 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/skyhttprewrite/rewrite.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="212">
-              <caret line="323" column="24" selection-start-line="323" selection-start-column="24" selection-end-line="323" selection-end-column="24" />
+            <state relative-caret-position="105">
+              <caret line="351" column="1" lean-forward="true" selection-start-line="351" selection-start-column="1" selection-end-line="351" selection-end-column="1" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://C:/Go/src/strings/strings.go">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-1839">
+              <caret line="849" column="38" selection-start-line="849" selection-start-column="35" selection-end-line="849" selection-end-column="38" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/server.go">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="156">
+              <caret line="447" column="14" selection-start-line="447" selection-start-column="14" selection-end-line="447" selection-end-column="14" />
+              <folding>
+                <element signature="e#18#154#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/http.go">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="64">
+              <caret line="15" column="35" lean-forward="true" selection-start-line="15" selection-start-column="35" selection-end-line="15" selection-end-column="35" />
             </state>
           </provider>
         </entry>
@@ -93,6 +109,7 @@
       <find>handle fasthttp.RequestHandler</find>
       <find>extract</find>
       <find>only one wildcard per path segment is allowed</find>
+      <find>skyhttprouter Handler tsr</find>
     </findStrings>
     <replaceStrings>
       <replace />
@@ -134,17 +151,17 @@
         <option value="$PROJECT_DIR$/examples/router/http_rewrite.go" />
         <option value="$PROJECT_DIR$/skyhttprewrite/path.go" />
         <option value="$PROJECT_DIR$/skyhttprewrite/params_legacy.go" />
-        <option value="$PROJECT_DIR$/skyhttprewrite/tree.go" />
         <option value="$PROJECT_DIR$/userdata.go" />
         <option value="$PROJECT_DIR$/server.go" />
-        <option value="$PROJECT_DIR$/examples/rewrite/http_rewrite.go" />
+        <option value="$PROJECT_DIR$/skyhttprewrite/tree.go" />
         <option value="$PROJECT_DIR$/skyhttprewrite/rewrite.go" />
+        <option value="$PROJECT_DIR$/examples/rewrite/http_rewrite.go" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="879" />
-    <option name="y" value="78" />
+    <option name="x" value="589" />
+    <option name="y" value="80" />
     <option name="width" value="1400" />
     <option name="height" value="1000" />
   </component>
@@ -298,7 +315,7 @@
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32827735" />
       <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49946696" weight="0.32827735" />
-      <window_info active="true" anchor="bottom" id="Debug" order="3" sideWeight="0.49946696" visible="true" weight="0.45937163" />
+      <window_info active="true" anchor="bottom" id="Debug" order="3" sideWeight="0.49946696" visible="true" weight="0.36619717" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -341,21 +358,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/stackless/func.go">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/stackless/func_test.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-270" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/stackless/writer.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1806">
-          <caret line="13" column="23" selection-start-line="13" selection-start-column="23" selection-end-line="13" selection-end-column="23" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/timer.go">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="126">
@@ -658,30 +660,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/server.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="556">
-          <caret line="552" lean-forward="true" selection-start-line="552" selection-end-line="552" />
-          <folding>
-            <element signature="e#18#154#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://C:/Go/src/regexp/regexp.go">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="19">
           <caret line="15" column="57" selection-start-line="15" selection-start-column="57" selection-end-line="15" selection-end-column="57" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/examples/router/http_router.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="286">
-          <caret line="43" column="49" lean-forward="true" selection-start-line="43" selection-end-line="43" selection-end-column="49" />
-          <folding>
-            <element signature="e#14#114#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -692,27 +674,68 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/skyhttprewrite/tree.go">
+    <entry file="file://$PROJECT_DIR$/http.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2564">
-          <caret line="244" column="20" selection-start-line="244" selection-start-column="20" selection-end-line="244" selection-end-column="20" />
+        <state relative-caret-position="64">
+          <caret line="15" column="35" lean-forward="true" selection-start-line="15" selection-start-column="35" selection-end-line="15" selection-end-column="35" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/examples/rewrite/http_rewrite.go">
+    <entry file="file://$PROJECT_DIR$/server.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="69" column="13" selection-start-line="69" selection-start-column="13" selection-end-line="69" selection-end-column="13" />
+        <state relative-caret-position="156">
+          <caret line="447" column="14" selection-start-line="447" selection-start-column="14" selection-end-line="447" selection-end-column="14" />
           <folding>
-            <element signature="e#14#125#0" expanded="true" />
+            <element signature="e#18#154#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/examples/router/http_router.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="688">
+          <caret line="43" column="49" lean-forward="true" selection-start-line="43" selection-end-line="43" selection-end-column="49" />
+          <folding>
+            <element signature="e#14#114#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/skyhttprewrite/tree.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="417">
+          <caret line="50" column="21" lean-forward="true" selection-start-line="50" selection-start-column="4" selection-end-line="50" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://C:/Go/src/net/url/url.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="249">
+          <caret line="850" column="1" lean-forward="true" selection-start-line="850" selection-start-column="1" selection-end-line="850" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://C:/Go/src/strings/strings.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1839">
+          <caret line="849" column="38" selection-start-line="849" selection-start-column="35" selection-end-line="849" selection-end-column="38" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/skyhttprewrite/rewrite.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="212">
-          <caret line="323" column="24" selection-start-line="323" selection-start-column="24" selection-end-line="323" selection-end-column="24" />
+        <state relative-caret-position="105">
+          <caret line="351" column="1" lean-forward="true" selection-start-line="351" selection-start-column="1" selection-end-line="351" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/examples/rewrite/http_rewrite.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="292">
+          <caret line="77" column="20" selection-start-line="77" selection-start-column="20" selection-end-line="77" selection-end-column="20" />
+          <folding>
+            <element signature="e#14#125#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

@@ -5,6 +5,7 @@
 package skyhttprewrite
 
 import (
+	"github.com/prometheus/common/log"
 	"github.com/valyala/fasthttp"
 	"strings"
 	"unicode"
@@ -85,6 +86,8 @@ func (n *node) addRoute(path string, rewriteUri *RewriteUri) {
 	n.priority++
 	numParams := countParams(path)
 
+	log.Info("numParams Count:",numParams,path)
+	log.Info("n.path",len(n.path),len(n.children))
 	// non-empty tree
 	if len(n.path) > 0 || len(n.children) > 0 {
 	walk:
@@ -210,6 +213,8 @@ func (n *node) addRoute(path string, rewriteUri *RewriteUri) {
 func (n *node) insertChild(numParams uint8, path, fullPath string,rewriteUri *RewriteUri) {
 	var offset int // already handled bytes of the path
 
+	log.Info("insertChild:",numParams,path,fullPath,len(path))
+
 	// find prefix until first wildcard (beginning with ':'' or '*'')
 	for i, max := 0, len(path); numParams > 0; i++ {
 		c := path[i]
@@ -223,7 +228,7 @@ func (n *node) insertChild(numParams uint8, path, fullPath string,rewriteUri *Re
 			switch path[end] {
 			// the wildcard name must not contain ':' and '*'
 			case ':', '*':
-				panic("only one wildcard per path segment is allowed, has: '" +
+				panic("同一个/path分段中不能有多个变量,only one wildcard per path segment is allowed, has: '" +
 					path[i:] + "' in path '" + fullPath + "'")
 			default:
 				end++
