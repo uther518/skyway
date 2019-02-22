@@ -74,7 +74,6 @@
 package skyhttprewrite
 
 import (
-	"fmt"
 	"github.com/prometheus/common/log"
 	"github.com/valyala/fasthttp"
 	"net/url"
@@ -94,9 +93,13 @@ type RewriteUri struct {
 	RouterPath         string //---/hello/:name/test/:foo 路由匹配,fastrouter
 	DestUri            string //---/test/$1/hello/$2   目标uri转换
 	OriginReg          string //---/hello/(\w+)/test/(\w+)
+	RewriteUri         string
+	RewriteQueryString string
 	Regexp             *regexp.Regexp
-	IsMatchQueryString bool
+	IsMatchOriginQueryString bool
+	IsMatchDestQueryString bool
 	QueryParams        []string
+	handle             fasthttp.RequestHandler //回调用户处理方法
 }
 
 /**
@@ -130,9 +133,13 @@ func (r *RewriteUri) MakeRegexp() {
 			} else {
 				continue
 			}
-			r.IsMatchQueryString = true
+			r.IsMatchOriginQueryString = true
 			r.QueryParams = append(r.QueryParams, pairs[0])
 		}
+	}
+
+	if(strings.Contains(r.DestUri,"?")){
+		r.IsMatchDestQueryString=true;
 	}
 
 	regstr := `(\{\w+\})`
@@ -147,7 +154,7 @@ func (r *RewriteUri) MakeRegexp() {
 
 // Router is a http.Handler which can be used to dispatch requests to different
 // handler functions via configurable routes
-type Router struct {
+type Rewrite struct {
 	trees map[string]*node
 
 	// Enables automatic redirection if the current route can't be matched but a
@@ -191,6 +198,8 @@ type Router struct {
 	// is called.
 	MethodNotAllowed fasthttp.RequestHandler
 
+	CallBackHandle RewriteRequestHandler //回调用户处理方法
+
 	// Function to handle panics recovered from http handlers.
 	// It should be used to generate a error page and return the http error code
 	// 500 (Internal Server Error).
@@ -201,47 +210,55 @@ type Router struct {
 
 // New returns a new initialized Router.
 // Path auto-correction, including trailing slashes, is enabled by default.
-func New() *Router {
-	return &Router{
+func New() *Rewrite {
+	return &Rewrite{
 		RedirectTrailingSlash:  true,
 		RedirectFixedPath:      true,
 		HandleMethodNotAllowed: true,
 		HandleOPTIONS:          true,
+		CallBackHandle:         nil,
 	}
 }
 
+type RewriteRequestHandler func(ctx *fasthttp.RequestCtx,rewriteUri *RewriteUri)
+
+
+func (r *Rewrite) CallBack(handler RewriteRequestHandler) {
+	r.CallBackHandle = handler
+}
+
 // GET is a shortcut for router.Handle("GET", path, handle)
-func (r *Router) GET(path string, rewriteUri *RewriteUri) {
+func (r *Rewrite) GET(path string, rewriteUri *RewriteUri) {
 	r.Handle("GET", path, rewriteUri)
 }
 
 // HEAD is a shortcut for router.Handle("HEAD", path, handle)
-func (r *Router) HEAD(path string, rewriteUri *RewriteUri) {
+func (r *Rewrite) HEAD(path string, rewriteUri *RewriteUri) {
 	r.Handle("HEAD", path, rewriteUri)
 }
 
 // OPTIONS is a shortcut for router.Handle("OPTIONS", path, handle)
-func (r *Router) OPTIONS(path string, rewriteUri *RewriteUri) {
+func (r *Rewrite) OPTIONS(path string, rewriteUri *RewriteUri) {
 	r.Handle("OPTIONS", path, rewriteUri)
 }
 
 // POST is a shortcut for router.Handle("POST", path, handle)
-func (r *Router) POST(path string, rewriteUri *RewriteUri) {
+func (r *Rewrite) POST(path string, rewriteUri *RewriteUri) {
 	r.Handle("POST", path, rewriteUri)
 }
 
 // PUT is a shortcut for router.Handle("PUT", path, handle)
-func (r *Router) PUT(path string, rewriteUri *RewriteUri) {
+func (r *Rewrite) PUT(path string, rewriteUri *RewriteUri) {
 	r.Handle("PUT", path, rewriteUri)
 }
 
 // PATCH is a shortcut for router.Handle("PATCH", path, handle)
-func (r *Router) PATCH(path string, rewriteUri *RewriteUri) {
+func (r *Rewrite) PATCH(path string, rewriteUri *RewriteUri) {
 	r.Handle("PATCH", path, rewriteUri)
 }
 
 // DELETE is a shortcut for router.Handle("DELETE", path, handle)
-func (r *Router) DELETE(path string, rewriteUri *RewriteUri) {
+func (r *Rewrite) DELETE(path string, rewriteUri *RewriteUri) {
 	r.Handle("DELETE", path, rewriteUri)
 }
 
@@ -253,7 +270,7 @@ func (r *Router) DELETE(path string, rewriteUri *RewriteUri) {
 // This function is intended for bulk loading and to allow the usage of less
 // frequently used, non-standardized or custom methods (e.g. for internal
 // communication with a proxy).
-func (r *Router) Handle(method, path string, rewriteUri *RewriteUri) {
+func (r *Rewrite) Handle(method, path string, rewriteUri *RewriteUri) {
 	if path[0] != '/' {
 		panic("path must begin with '/' in path '" + path + "'")
 	}
@@ -295,7 +312,7 @@ func (r *Router) ServeFiles(path string, rootPath string) {
 		fileHandler(ctx)
 	})
 }*/
-func (r *Router) recv(ctx *fasthttp.RequestCtx) {
+func (r *Rewrite) recv(ctx *fasthttp.RequestCtx) {
 	if rcv := recover(); rcv != nil {
 		r.PanicHandler(ctx, rcv)
 	}
@@ -306,14 +323,14 @@ func (r *Router) recv(ctx *fasthttp.RequestCtx) {
 // If the path was found, it returns the handle function and the path parameter
 // values. Otherwise the third return value indicates whether a redirection to
 // the same path with an extra / without the trailing slash should be performed.
-func (r *Router) Lookup(method, path string, ctx *fasthttp.RequestCtx) (*RewriteUri, bool) {
+func (r *Rewrite) Lookup(method, path string, ctx *fasthttp.RequestCtx) (*RewriteUri, bool) {
 	if root := r.trees[method]; root != nil {
 		return root.getValue(path, ctx)
 	}
 	return nil, false
 }
 
-func (r *Router) allowed(path, reqMethod string) (allow string) {
+func (r *Rewrite) allowed(path, reqMethod string) (allow string) {
 	if path == "*" || path == "/*" { // server-wide
 		for method := range r.trees {
 			if method == "OPTIONS" {
@@ -351,26 +368,39 @@ func (r *Router) allowed(path, reqMethod string) (allow string) {
 	return
 }
 
-func WriteRequest(ctx *fasthttp.RequestCtx, rewriteUri *RewriteUri) {
-	destUri:=rewriteUri.DestUri
+/**
+ *根据重写规则，重写请求
+ */
+func (r *Rewrite) RewriteRequest(ctx *fasthttp.RequestCtx, rewriteUri *RewriteUri) {
+	destUri := rewriteUri.DestUri
 	//传统api转为restful api
-	if rewriteUri.IsMatchQueryString {
+	if rewriteUri.IsMatchOriginQueryString {
 		values, _ := url.ParseQuery(string(ctx.URI().QueryString()))
 		for _, key := range rewriteUri.QueryParams {
-			val:=values.Get(key)
-			idx:=ctx.UserValueSize()+1
-			sep:="$"+strconv.Itoa(idx)
-			destUri=strings.Replace(destUri,sep,val,-1)
+			val := values.Get(key)
+			idx := ctx.UserValueSize() + 1
+			sep := "$" + strconv.Itoa(idx)
+			destUri = strings.Replace(destUri, sep, val, -1)
 		}
 	}
-	fmt.Fprintf(ctx, "%q\n", rewriteUri.Regexp.ReplaceAllString(ctx.URI().String(),destUri))
+	uriPath := string(ctx.URI().Path())
+	rewriteUri.RewriteUri=rewriteUri.Regexp.ReplaceAllString(uriPath, destUri)
+
+	if rewriteUri.IsMatchDestQueryString {
+		querys:=strings.Split(rewriteUri.RewriteUri,"?");
+		rewriteUri.RewriteUri=querys[0]
+		rewriteUri.RewriteQueryString=querys[1]
+	}
+
+	//fmt.Fprintf(ctx, "%q\n", rewriteUri.Regexp.ReplaceAllString(uriPath, destUri))
+	r.CallBackHandle(ctx, rewriteUri);
 }
 
 /**
  TODO 001::每个请求过来后会调用此路由方法
  */
 // Handler makes the router implement the fasthttp.ListenAndServe interface.
-func (r *Router) Handler(ctx *fasthttp.RequestCtx) {
+func (r *Rewrite) Handler(ctx *fasthttp.RequestCtx) {
 	if r.PanicHandler != nil {
 		defer r.recv(ctx)
 	}
@@ -382,7 +412,7 @@ func (r *Router) Handler(ctx *fasthttp.RequestCtx) {
 	method := string(ctx.Method())
 	if root := r.trees[method]; root != nil {
 		if writeUri, tsr := root.getValue(path, ctx); writeUri != nil {
-			WriteRequest(ctx, writeUri)
+			r.RewriteRequest(ctx, writeUri)
 			return
 		} else if method != "CONNECT" && path != "/" {
 			code := 301 // Permanent redirect, request with GET method

@@ -5,6 +5,7 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
+	"github.com/prometheus/common/log"
 	"io"
 	"mime/multipart"
 	"os"
@@ -1092,6 +1093,8 @@ func (req *Request) Write(w *bufio.Writer) error {
 			return errRequestHostRequired
 		}
 		req.Header.SetHostBytes(host)
+		log.Info("uri.RequestURI()======="+string(uri.RequestURI()))
+
 		req.Header.SetRequestURIBytes(uri.RequestURI())
 	}
 

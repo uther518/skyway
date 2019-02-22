@@ -6,6 +6,7 @@ import (
 	"crypto/tls"
 	"errors"
 	"fmt"
+	"github.com/prometheus/common/log"
 	"io"
 	"net"
 	"strings"
@@ -1147,7 +1148,7 @@ func (c *HostClient) doNonNilReqResp(req *Request, resp *Response) (bool, error)
 	}
 	bw := c.acquireWriter(conn)
 	err = req.Write(bw)
-
+	log.Info("RequestUri===="+string(req.RequestURI()))
 	if resetConnection {
 		req.Header.ResetConnectionClose()
 	}
