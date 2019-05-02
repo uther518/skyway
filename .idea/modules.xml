@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/fasthttp-master.iml" filepath="$PROJECT_DIR$/.idea/fasthttp-master.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/gorouter.iml" filepath="$PROJECT_DIR$/.idea/gorouter.iml" />
     </modules>
   </component>
 </project>
