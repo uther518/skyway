@@ -4,8 +4,8 @@ import (
 	"bytes"
 	"github.com/valyala/fasthttp"
 	"log"
-	"skyway/skyrewrite"
-	"skyway/skyrouter"
+	"skyway/gateway/skyrewrite"
+	"skyway/gateway/skyrouter"
 	"time"
 )
 
@@ -69,7 +69,6 @@ func RouterRequest(ctx *fasthttp.RequestCtx, rewriteUri *skyrewrite.SkyRewrite) 
 
 func main() {
 	router := skyrouter.New()
-
 	a := skyrewrite.New()
 	a.OriginUri = "/hello/{name}/test/{foo}"
 	a.DestUri = "/test.php?hello=$1&test=$2"

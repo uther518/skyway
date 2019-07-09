@@ -4,7 +4,7 @@ import (
 	"github.com/valyala/fasthttp"
 	"log"
 	"net/url"
-	"skyway/skyrewrite"
+	"skyway/gateway/skyrewrite"
 	"strconv"
 	"strings"
 )

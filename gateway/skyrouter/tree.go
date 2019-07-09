@@ -2,7 +2,7 @@ package skyrouter
 
 import (
 	"github.com/valyala/fasthttp"
-	"skyway/skyrewrite"
+	"skyway/gateway/skyrewrite"
 	"strings"
 	"unicode"
 	"unicode/utf8"
